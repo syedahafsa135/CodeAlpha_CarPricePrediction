@@ -1,0 +1,14 @@
+# Python virtual environments (never commit these)
+codealpha/
+.codealpha1/
+venv/
+.venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Editor / OS files
+.vscode/
+.DS_Store

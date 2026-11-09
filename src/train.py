@@ -1,7 +1,13 @@
+# src/train.py
 import joblib
+import numpy as np
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
-from src.data import load_and_preprocess_data
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
+from src.data import ROOT, load_and_preprocess_data
+
+MODEL_PATH = ROOT / "models" / "model.pkl"
+
 
 def train_model():
     # Load and split data
@@ -12,24 +18,24 @@ def train_model():
     model.fit(X_train, y_train)
 
     # Save trained model
-    joblib.dump(model, r"E:\codealpha\models\model.pkl")
-    print("✅ Model is trained and saved")
+    MODEL_PATH.parent.mkdir(exist_ok=True)
+    joblib.dump(model, MODEL_PATH)
+    print("✅ Model trained and saved to", MODEL_PATH)
 
-    # Evaluate model on test set
+    # Evaluate on the held-out test set only
     y_pred = model.predict(X_test)
-    mae = mean_absolute_error(y_test, y_pred)
     mse = mean_squared_error(y_test, y_pred)
-    r2 = r2_score(y_test, y_pred)
-
     metrics = {
-        "MAE": mae,
+        "MAE": mean_absolute_error(y_test, y_pred),
         "MSE": mse,
-        "R2 Score": r2
+        "RMSE": np.sqrt(mse),
+        "R2 Score": r2_score(y_test, y_pred),
     }
-
-    # Return both model + metrics
     return model, metrics
 
+
 if __name__ == "__main__":
-    model, metrics = train_model()
-    print("Metrics:", metrics)
+    _, metrics = train_model()
+    print("\n📊 Test-set results:")
+    for name, value in metrics.items():
+        print(f"  {name}: {value:.4f}")
