@@ -29,15 +29,18 @@ A used-car dealer or private seller wants a fair asking price. **Which features 
 
 ## Key findings
 
-<!-- TODO: fill in from the output of `python -m src.evaluate`. Use the printed numbers only. -->
+Scores on the 61 test cars (output of `python -m src.evaluate`):
 
 | Metric (test set) | Value |
 |---|---|
-| MAE (lakhs) | _run `python -m src.evaluate`_ |
-| RMSE (lakhs) | _run `python -m src.evaluate`_ |
-| R² | _run `python -m src.evaluate`_ |
+| MAE (lakhs) | 0.60 |
+| MSE | 0.82 |
+| RMSE (lakhs) | 0.91 |
+| R² | 0.964 |
 
-- **Strongest price driver:** _see the feature importance printed by `src.evaluate`_
+- **The model is accurate on unseen cars.** It explains 96.4% of the variation in price. The largest errors are on the few expensive cars.
+- **A car's new price is the strongest driver** (importance 0.884), followed by year (0.062) and kilometres driven (0.034). Transmission, fuel type, seller type and owners each add less than 0.01.
+- **Diesel cars sell for more than petrol cars in this data,** but fuel type barely registers in the model. The gap likely reflects which cars are diesel rather than the fuel itself. Only 2 cars are CNG, too few to conclude anything.
 
 ![Feature importance](images/feature-importance.png)
 
