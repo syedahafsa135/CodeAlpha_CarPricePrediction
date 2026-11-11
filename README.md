@@ -8,7 +8,7 @@ Estimate a used car's selling price from its age, original price, mileage, fuel 
 
 ---
 
-## Business question
+## Problem
 
 A used-car dealer or private seller wants a fair asking price. **Which features of a car drive its resale value, and can we estimate a price from them reliably?**
 
@@ -18,7 +18,7 @@ A used-car dealer or private seller wants a fair asking price. **Which features 
 - **Size:** 301 cars, model years 2003–2018 (239 petrol, 60 diesel, 2 CNG)
 - **Columns:** `Car_Name`, `Year`, `Selling_Price` (target, in lakhs), `Present_Price` (new price, in lakhs), `Driven_kms`, `Fuel_Type`, `Selling_type`, `Transmission`, `Owner`
 
-## Approach
+## Method
 
 1. Load the data, drop rows with missing values, and standardise two column names (`Driven_kms` → `Kms_Driven`, `Selling_type` → `Seller_Type`) so training and the app use the same names
 2. Drop `Car_Name` and one-hot encode `Fuel_Type`, `Seller_Type` and `Transmission`
@@ -27,7 +27,7 @@ A used-car dealer or private seller wants a fair asking price. **Which features 
 5. Evaluate on the **test set only** with MAE, RMSE and R²
 6. Save the model (`models/model.pkl`) and serve predictions in a **Streamlit** app
 
-## Key findings
+## Results
 
 Scores on the 61 test cars (output of `python -m src.evaluate`):
 
@@ -45,6 +45,12 @@ Scores on the 61 test cars (output of `python -m src.evaluate`):
 ![Feature importance](images/feature-importance.png)
 
 ![Selling price by fuel type](images/price-by-fuel-type.png)
+
+### The app
+
+Enter a car's details and get a resale price estimate (screenshot of the app running locally).
+
+![Streamlit app predicting a car's selling price](images/app-screenshot.png)
 
 ## How to run
 
@@ -69,6 +75,12 @@ python -m src.train
 python -m src.evaluate
 streamlit run app.py           # opens the prediction app in your browser
 ```
+
+## Limitations
+
+- 301 cars with few expensive ones: errors are largest at the high end, where the data is thinnest.
+- Only 2 CNG cars, so nothing can be concluded about CNG.
+- A single 80/20 split; cross-validation would give a steadier estimate.
 
 ## Project structure
 
